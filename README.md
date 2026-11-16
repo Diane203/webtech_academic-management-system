@@ -275,7 +275,16 @@ REGISTRATION
 - course_id
 ```
 
+
+
+
 ## 6. Relational database schema
+
+
+
+<img width="967" height="580" alt="image" src="https://github.com/user-attachments/assets/3a74fa71-66e1-45fc-9b85-4a4f7e91c0d0" />
+
+
 
 ```sql
 departments (

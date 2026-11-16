@@ -424,7 +424,6 @@ The analysis identifies six main entities: Department, Student, StudentProfile, 
 
 
 
-```
 
 
 

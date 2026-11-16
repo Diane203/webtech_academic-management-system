@@ -383,7 +383,8 @@ Set the `DB_PASSWORD` environment variable to the password for the configured da
 $env:DB_PASSWORD = "your-database-password"
 ```
 
-Do not commit database passwords to the repository.
+<img width="1916" height="1041" alt="image" src="https://github.com/user-attachments/assets/f08158d8-5380-4a29-9218-f749d6b611a9" />
+
 
 ## 10. Run the project
 

@@ -427,4 +427,3 @@ The analysis identifies six main entities: Department, Student, StudentProfile, 
 
 
 
-This structure is suitable for the model and repository stage of the assignment and can be extended later with service and controller layers if required.

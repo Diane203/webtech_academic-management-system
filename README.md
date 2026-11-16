@@ -1,329 +1,367 @@
-# University Course Registration and Academic Management System
+University Course Registration and Academic Management System
 
-## 1. Problem analysis and identified entities
+Web Technology and Internet: Individual Assignment
 
-The assignment requires the design of a data model for a university academic system. The main actors and business objects in the problem statement are:
+	
+Student Name	IGIRANEZA Diane
+Registration No.	27895
+Course	Web Technology and Internet
+Deadline	Monday, 16 November 2026, 6:00 PM
+Scope	Model and Repository layers
+Table of Contents
+Project Overview
+Technology Stack
+Problem Analysis and Identified Entities
+Identified Attributes
+Relationships and Cardinality
+Foreign Keys, Join Table and Join Entity
+Entity Relationship Diagram (ERD)
+Relational Database Schema
+Why These Entities and Relationships Were Selected
+Hibernate/JPA Implementation
+Local Setup and Configuration
+Running and Testing the Project
+Verifying the Database in PostgreSQL
+Screenshots
+Submission Checklist
+1. Project Overview
 
-1. Department
-   - A department runs academic activities, offers courses, and employs lecturers.
-   - Each department has a head lecturer.
-   - Each department can have many students and many courses.
+A university currently manages academic information manually, which makes it hard to maintain student records, organize courses, assign lecturers, and track registrations. This project designs and implements the data model and repository layers of a University Course Registration and Academic Management System using Spring Boot, Spring Data JPA/Hibernate and PostgreSQL.
 
-2. Student
-   - A student belongs to exactly one department.
-   - A student has one personal profile.
-   - A student can register for many courses in multiple academic periods.
+The system manages:
 
-3. StudentProfile
-   - Stores the student’s date of birth, gender, phone number, and residential address.
-   - This is a one-to-one profile attached to a single student.
+Academic departments, each with a head lecturer
+Students, each assigned to a department and having exactly one personal profile
+Lecturers, employed by departments and teaching multiple courses
+Courses, offered by departments and taught by multiple lecturers
+Registrations of students for courses, with date, academic year, semester, status and grade
 
-4. Lecturer
-   - A lecturer is employed by a department.
-   - A lecturer can teach multiple courses.
-   - A course can be taught by multiple lecturers.
-   - The many-to-many relationship between lecturers and courses is handled using a join table and not by creating a separate entity.
+At this stage only the Model and Repository layers are implemented. Service and controller layers can be added later.
 
-5. Course
-   - A course belongs to one department.
-   - A course can be taught by several lecturers.
-   - A course can be enrolled in by many students.
+2. Technology Stack
+Category	Technology
+Language	Java 17 or later
+Framework	Spring Boot (generated with Spring Initializr)
+Persistence / ORM	Spring Data JPA / Hibernate
+Database	PostgreSQL, database name: university_academic_db
+Build Tool	Maven
+IDE	Visual Studio Code
+Version Control	Git and GitHub
+3. Problem Analysis and Identified Entities
 
-6. Registration
-   - Represents the student-course relationship.
-   - It stores additional data that cannot fit in the relationship alone: registration date, academic year, semester, status, and grade.
-   - This is the join entity needed for the student-course relationship.
+The main actors and business objects in the problem statement are:
 
-## 2. Identified attributes
+Department
+Runs academic activities, offers courses, and employs lecturers.
+Has one lecturer who serves as head.
+Can have many students, many courses and many lecturers.
+Student
+Belongs to exactly one department.
+Has exactly one personal profile.
+Can register for many courses across multiple academic periods.
+StudentProfile
+Stores date of birth, gender, phone number and residential address.
+One-to-one with a single student.
+Lecturer
+Employed by one department.
+Can teach multiple courses; a course can be taught by multiple lecturers.
+This many-to-many relationship is handled with a join table only, with no separate entity (as the assignment requires).
+Course
+Belongs to one department.
+Can be taught by several lecturers and taken by many students.
+Registration
+Represents the student-course relationship.
+Stores data that cannot fit in a simple relationship: registration date, academic year, semester, status and grade.
+This is the join entity for the student-course relationship.
+4. Identified Attributes
+Department
 
-### Department
-- id
-- name
-- location
-- headLecturer
+id, name, location, headLecturer
 
-### Student
-- id
-- studentNumber
-- firstName
-- lastName
-- email
-- department
+Student
 
-### StudentProfile
-- id
-- dateOfBirth
-- gender
-- phoneNumber
-- residentialAddress
-- student
+id, studentNumber, firstName, lastName, email, department
 
-### Lecturer
-- id
-- staffNumber
-- firstName
-- lastName
-- email
-- department
-- courses
+StudentProfile
 
-### Course
-- id
-- courseCode
-- title
-- creditHours
-- department
-- lecturers
+id, dateOfBirth, gender, phoneNumber, residentialAddress, student
 
-### Registration
-- id
-- registrationDate
-- academicYear
-- semester
-- status
-- grade
-- student
-- course
+Lecturer
 
-## 3. Relationship analysis and cardinality
+id, staffNumber, firstName, lastName, email, department, courses
 
-| Relationship | Cardinality | Why |
-|---|---|---|
-| Department to Lecturer | One-to-many | One department employs many lecturers, while each lecturer belongs to one department. |
-| Department to Course | One-to-many | One department offers many courses, and each course belongs to one department. |
-| Department to Head Lecturer | One-to-one | Each department has exactly one head lecturer. |
-| Student to StudentProfile | One-to-one | Each student has exactly one profile and each profile belongs to exactly one student. |
-| Student to Department | Many-to-one | Many students are assigned to one department. |
-| Lecturer to Course | Many-to-many | A lecturer can teach several courses, and a course can be taught by several lecturers. |
-| Student to Course via Registration | Many-to-many with extra attributes | Students can register for many courses, and a course can be taken by many students. The extra registration details require a join entity. |
-| Registration to Student | Many-to-one | Many registration records belong to the same student. |
-| Registration to Course | Many-to-one | Many registration records belong to the same course. |
+Course
 
-## 4. Foreign keys and join tables
+id, courseCode, title, creditHours, department, lecturers
 
-### Foreign keys required
-- departments.head_lecturer_id -> lecturers.id
-- students.department_id -> departments.id
-- student_profiles.student_id -> students.id
-- lecturers.department_id -> departments.id
-- courses.department_id -> departments.id
-- registrations.student_id -> students.id
-- registrations.course_id -> courses.id
+Registration
 
-### Join table required
-- course_lecturer
-  - This resolves the many-to-many association between Lecturer and Course.
-  - It contains only the two foreign keys: lecturer_id and course_id.
+id, registrationDate, academicYear, semester, status, grade, student, course
 
-### Join entity required
-- registrations
-  - This is required because the student-course relationship contains attributes beyond simple membership.
-  - The extra attributes are registrationDate, academicYear, semester, status, and grade.
+Enumerations
+Enum	Values
+Gender	MALE, FEMALE
+RegistrationStatus	PENDING, APPROVED, REJECTED
+5. Relationships and Cardinality
+#	Relationship	Cardinality	Why
+1	Department to Lecturer	One-to-many	One department employs many lecturers; each lecturer belongs to one department.
+2	Department to Course	One-to-many	One department offers many courses; each course belongs to one department.
+3	Department to Student	One-to-many	One department has many students; each student is assigned to one department.
+4	Department to Head Lecturer	One-to-one	Each department has exactly one head lecturer.
+5	Student to StudentProfile	One-to-one	Each student has exactly one profile and each profile belongs to one student.
+6	Lecturer to Course	Many-to-many	A lecturer teaches several courses and a course can have several lecturers.
+7	Student to Course (via Registration)	Many-to-many with extra attributes	Needs a join entity to hold date, year, semester, status and grade.
+8	Registration to Student	Many-to-one	Many registrations belong to one student.
+9	Registration to Course	Many-to-one	Many registrations belong to one course.
+6. Foreign Keys, Join Table and Join Entity
+Relationships that require a foreign key
+Foreign key	References
+departments.head_lecturer_id	lecturers.id
+students.department_id	departments.id
+student_profiles.student_id (UNIQUE)	students.id
+lecturers.department_id	departments.id
+courses.department_id	departments.id
+registrations.student_id	students.id
+registrations.course_id	courses.id
 
-## 5. Entity Relationship Diagram (ERD)
+Note: departments.head_lecturer_id and lecturers.department_id reference each other. To avoid a circular insert problem, head_lecturer_id is nullable: create the department first, then the lecturer, then assign the lecturer as head.
 
-```text
-+-------------------+        1      +-------------------+
-| DEPARTMENT        |<----------------| LECTURER          |
-|-------------------|                |-------------------|
-| id                |                | id                |
-| name              |                | staffNumber       |
-| location          |                | firstName         |
-| head_lecturer_id  |                | lastName          |
-+-------------------+                | email             |
-     |                               | department_id     |
-     | 1                             +-------------------+
-     |                               |
-     |                               | N
-     |                               |
-     |                            teaches
-     |                               |
-     v                               v
-+-------------------+       N       +-------------------+
-| COURSE            |<-------------->| LECTURER          |
-|-------------------|                |                   |
-| id                |                |                   |
-| courseCode        |                |                   |
-| title             |                |                   |
-| creditHours       |                |                   |
-| department_id     |                |                   |
-+-------------------+                +-------------------+
-      ^
-      |
-      | 1
-      |
-+-------------------+
-| STUDENT           |
-|-------------------|
-| id                |
-| studentNumber     |
-| firstName         |
-| lastName          |
-| email             |
-| department_id     |
-+-------------------+
-      |
-      | 1
-      v
-+-------------------+
-| STUDENT_PROFILE   |
-|-------------------|
-| id                |
-| dateOfBirth       |
-| gender            |
-| phoneNumber       |
-| residentialAddress |
-| student_id        |
-+-------------------+
+Join table (many-to-many without extra data)
 
-STUDENT <----> COURSE through REGISTRATION
+course_lecturer resolves the Lecturer to Course many-to-many relationship. It contains only two foreign keys, lecturer_id and course_id, which together form the composite primary key. No separate entity class is created for it.
 
-REGISTRATION
-- id
-- registrationDate
-- academicYear
-- semester
-- status
-- grade
-- student_id
-- course_id
-```
+Join entity (many-to-many with extra data)
 
-## 6. Relational database schema
+registrations is required for the Student to Course relationship because the relationship carries its own attributes: registrationDate, academicYear, semester, status and grade. A plain join table cannot store these.
 
-```sql
+7. Entity Relationship Diagram (ERD)
+
+Entity Relationship Diagram
+
+8. Relational Database Schema
+
+Relational Schema
+
+PK = primary key, FK = foreign key, UK = unique. Numbered arrows point from the foreign key to the primary key it references.
+
+The same schema in text form:
+
+sql
 departments (
-    id PK,
-    name UNIQUE NOT NULL,
-    location NOT NULL,
-    head_lecturer_id FK -> lecturers.id
+    id                BIGSERIAL PRIMARY KEY,
+    name              VARCHAR UNIQUE NOT NULL,
+    location          VARCHAR NOT NULL,
+    head_lecturer_id  BIGINT UNIQUE REFERENCES lecturers(id)   -- nullable
 )
 
 students (
-    id PK,
-    student_number UNIQUE NOT NULL,
-    first_name NOT NULL,
-    last_name NOT NULL,
-    email UNIQUE NOT NULL,
-    department_id FK -> departments.id
+    id              BIGSERIAL PRIMARY KEY,
+    student_number  VARCHAR UNIQUE NOT NULL,
+    first_name      VARCHAR NOT NULL,
+    last_name       VARCHAR NOT NULL,
+    email           VARCHAR UNIQUE NOT NULL,
+    department_id   BIGINT NOT NULL REFERENCES departments(id)
 )
 
 student_profiles (
-    id PK,
-    date_of_birth NOT NULL,
-    gender NOT NULL,
-    phone_number,
-    residential_address NOT NULL,
-    student_id UNIQUE FK -> students.id
+    id                   BIGSERIAL PRIMARY KEY,
+    date_of_birth        DATE NOT NULL,
+    gender               VARCHAR NOT NULL,
+    phone_number         VARCHAR,
+    residential_address  VARCHAR NOT NULL,
+    student_id           BIGINT UNIQUE NOT NULL REFERENCES students(id)
 )
 
 lecturers (
-    id PK,
-    staff_number UNIQUE NOT NULL,
-    first_name NOT NULL,
-    last_name NOT NULL,
-    email UNIQUE NOT NULL,
-    department_id FK -> departments.id
+    id             BIGSERIAL PRIMARY KEY,
+    staff_number   VARCHAR UNIQUE NOT NULL,
+    first_name     VARCHAR NOT NULL,
+    last_name      VARCHAR NOT NULL,
+    email          VARCHAR UNIQUE NOT NULL,
+    department_id  BIGINT NOT NULL REFERENCES departments(id)
 )
 
 courses (
-    id PK,
-    course_code UNIQUE NOT NULL,
-    title NOT NULL,
-    credit_hours NOT NULL,
-    department_id FK -> departments.id
+    id             BIGSERIAL PRIMARY KEY,
+    course_code    VARCHAR UNIQUE NOT NULL,
+    title          VARCHAR NOT NULL,
+    credit_hours   INTEGER NOT NULL,
+    department_id  BIGINT NOT NULL REFERENCES departments(id)
 )
 
 course_lecturer (
-    lecturer_id PK/FK -> lecturers.id,
-    course_id PK/FK -> courses.id
+    lecturer_id  BIGINT NOT NULL REFERENCES lecturers(id),
+    course_id    BIGINT NOT NULL REFERENCES courses(id),
+    PRIMARY KEY (lecturer_id, course_id)
 )
 
 registrations (
-    id PK,
-    registration_date NOT NULL,
-    academic_year NOT NULL,
-    semester NOT NULL,
-    status NOT NULL,
-    grade,
-    student_id FK -> students.id,
-    course_id FK -> courses.id,
-    UNIQUE(student_id, course_id, academic_year, semester)
+    id                 BIGSERIAL PRIMARY KEY,
+    registration_date  DATE NOT NULL,
+    academic_year      VARCHAR NOT NULL,
+    semester           VARCHAR NOT NULL,
+    status             VARCHAR NOT NULL,      -- PENDING | APPROVED | REJECTED
+    grade              NUMERIC(5,2),          -- nullable until a grade is awarded
+    student_id         BIGINT NOT NULL REFERENCES students(id),
+    course_id          BIGINT NOT NULL REFERENCES courses(id),
+    UNIQUE (student_id, course_id, academic_year, semester)
 )
-```
+9. Why These Entities and Relationships Were Selected
 
-## 7. Why these entities and relationships were selected
+The design follows the problem statement closely.
 
-The design follows the problem statement closely. A department is the main academic unit and therefore a logical entity. Students and lecturers are separate actors because they have different roles and data. A profile is modeled as a separate entity because the student’s personal information is a distinct set of mandatory attributes and should be stored in a dedicated table. Courses belong to departments and are taught by lecturers, so they are modeled as standalone entities. The student-course relationship is not a simple many-to-many without extra fields; the assignment explicitly requires storing registration date, academic year, semester, status, and grade. That is why Registration is implemented as a join entity rather than a lightweight join table. The Course-Lecturer relationship remains a pure many-to-many because the requirement states that no separate entity is needed for it.
+Department is the main academic unit, so it is its own entity. The head lecturer is a one-to-one link back to a lecturer.
+Student and Lecturer are separate entities because they play different roles and carry different data.
+StudentProfile is separate because the personal information (date of birth, gender, phone, address) is a distinct set of attributes with a strict one-to-one link; keeping it in its own table keeps the student table focused on academic identity.
+Course belongs to one department and is taught by lecturers, so it is a standalone entity.
+Lecturer to Course is a pure many-to-many. The assignment states it must be maintained without a separate entity, so a @JoinTable is used.
+Registration is a join entity rather than a join table because the student-course link must store registration date, academic year, semester, status and grade. It uses two @ManyToOne relationships, one to Student and one to Course.
+A unique constraint on (student_id, course_id, academic_year, semester) prevents a student from registering twice for the same course in the same period, while still allowing a retake in a later period.
+10. Hibernate/JPA Implementation
+Annotation mapping
+Entity	Field	Annotation
+All entities	id	@Id + @GeneratedValue(strategy = GenerationType.IDENTITY)
+Department	headLecturer	@OneToOne + @JoinColumn(name = "head_lecturer_id")
+Department	students, lecturers, courses	@OneToMany(mappedBy = "department")
+Student	department	@ManyToOne + @JoinColumn(name = "department_id")
+Student	profile	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+Student	registrations	@OneToMany(mappedBy = "student")
+StudentProfile	student	@OneToOne + @JoinColumn(name = "student_id", unique = true)
+StudentProfile	gender	@Enumerated(EnumType.STRING)
+Lecturer	department	@ManyToOne + @JoinColumn(name = "department_id")
+Lecturer	courses	@ManyToMany + @JoinTable(name = "course_lecturer", joinColumns = @JoinColumn(name = "lecturer_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+Course	department	@ManyToOne + @JoinColumn(name = "department_id")
+Course	lecturers	@ManyToMany(mappedBy = "courses")
+Course	registrations	@OneToMany(mappedBy = "course")
+Registration	student	@ManyToOne + @JoinColumn(name = "student_id")
+Registration	course	@ManyToOne + @JoinColumn(name = "course_id")
+Registration	status	@Enumerated(EnumType.STRING)
 
-## 8. Project structure
+Lecturer is the owning side of the many-to-many relationship; Course is the inverse side.
 
-This project implements the model and repository layers in Spring Boot with Hibernate and PostgreSQL.
+Data types
+Attribute type	Java type
+Identifiers	Long
+Names, codes, email, phone, address	String
+Date of birth, registration date	LocalDate
+Credit hours	Integer
+Grade	Double or BigDecimal (nullable)
+Gender, status	Enums stored as STRING
+Repositories
 
-```text
-university-academic-system/
-├── schema.sql
-├── pom.xml
-├── README.md
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/universityacademicsystem/
-│   │   │   ├── UniversityAcademicSystemApplication.java
-│   │   │   ├── model/
-│   │   │   │   ├── Course.java
-│   │   │   │   ├── Department.java
-│   │   │   │   ├── Gender.java
-│   │   │   │   ├── Lecturer.java
-│   │   │   │   ├── Registration.java
-│   │   │   │   ├── RegistrationStatus.java
-│   │   │   │   ├── Student.java
-│   │   │   │   └── StudentProfile.java
-│   │   │   └── repository/
-│   │   │       ├── CourseRepository.java
-│   │   │       ├── DepartmentRepository.java
-│   │   │       ├── LecturerRepository.java
-│   │   │       ├── RegistrationRepository.java
-│   │   │       ├── StudentProfileRepository.java
-│   │   │       └── StudentRepository.java
-│   │   └── resources/
-│   │       └── application.properties
-│   └── test/
-│       ├── java/com/example/universityacademicsystem/
-│       │   └── UniversityAcademicSystemApplicationTests.java
-│       └── resources/
-│           └── application.properties
-```
+Each entity has a Spring Data repository extending JpaRepository<Entity, Long>:
 
-## 9. Local database setup
+DepartmentRepository, StudentRepository, StudentProfileRepository, LecturerRepository, CourseRepository, RegistrationRepository.
 
-Use a local PostgreSQL instance. Create the database manually:
+No repository is created for course_lecturer because it is a join table, not an entity.
 
-```sql
+11. Local Setup and Configuration
+Prerequisites
+Java 17 or later
+Maven 3.8+
+PostgreSQL installed and running
+Git
+1. Clone the repository
+bash
+git clone <your-repository-url>
+cd university-academic-system
+2. Create the database
+sql
 CREATE DATABASE university_academic_db;
-```
+3. Configure the connection
 
-Ensure the database username in `src/main/resources/application.properties` matches your PostgreSQL user. Hibernate creates or updates the tables when the application starts.
+src/main/resources/application.properties:
 
-Set the `DB_PASSWORD` environment variable to the password for the configured database user before starting the application. In PowerShell, for the current terminal session, run:
+properties
+spring.application.name=university-academic-system
 
-```powershell
+spring.datasource.url=jdbc:postgresql://localhost:5432/university_academic_db
+spring.datasource.username=postgres
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+Make sure spring.datasource.username matches your PostgreSQL user. With ddl-auto=update, Hibernate creates or updates the tables when the application starts.
+
+4. Set the database password
+
+The password is read from the DB_PASSWORD environment variable. Do not commit passwords to the repository.
+
+PowerShell (current session):
+
+powershell
 $env:DB_PASSWORD = "your-database-password"
-```
 
-Do not commit database passwords to the repository.
+macOS / Linux:
 
-## 10. Run the project
+bash
+export DB_PASSWORD="your-database-password"
+12. Running and Testing the Project
 
-```bash
+Run the tests:
+
+bash
 mvn test
-```
 
-If the PostgreSQL service is available, the application can then be started with:
+Start the application (PostgreSQL must be running):
 
-```bash
+bash
 mvn spring-boot:run
-```
 
+On startup, Hibernate logs the create table and alter table ... add constraint statements. This confirms that the entity mappings, primary keys, foreign keys and the join table were generated successfully.
 
+13. Verifying the Database in PostgreSQL
 
-This structure is suitable for the model and repository stage of the assignment and can be extended later with service and controller layers if required.
+Connect with psql, pgAdmin or the VS Code PostgreSQL extension, then run:
+
+sql
+-- List all generated tables
+\dt
+
+-- Inspect each table, including its keys and constraints
+\d departments
+\d students
+\d student_profiles
+\d lecturers
+\d courses
+\d course_lecturer
+\d registrations
+
+List every foreign key relationship:
+
+sql
+SELECT conrelid::regclass AS table_name,
+       conname            AS constraint_name,
+       pg_get_constraintdef(oid) AS definition
+FROM pg_constraint
+WHERE contype = 'f'
+ORDER BY conrelid::regclass::text;
+
+Expected result: seven tables (departments, students, student_profiles, lecturers, courses, course_lecturer, registrations) and the foreign keys listed in Section 6.
+
+14. Screenshots
+
+Replace these with your own screenshots stored in the screenshots/ folder.
+
+Description	Screenshot
+Application started successfully and Hibernate generated the tables	Startup
+All tables created in university_academic_db	Tables
+Foreign key relationships	Foreign keys
+course_lecturer join table with composite primary key	Join table
+15. Submission Checklist
+[x] Problem analysis and identified entities (Sections 3 to 4)
+[x] Relationships and cardinality (Section 5)
+[x] Foreign keys, join table and join entity (Section 6)
+[x] Entity Relationship Diagram (Section 7)
+[x] Relational database schema (Section 8)
+[x] Complete Spring Boot project source code (src/)
+[ ] PostgreSQL database generated and verified (Section 13)
+[ ] Screenshots added (Section 14)
+[ ] Repository is public or shared with the lecturer
+[ ] Repository link submitted before Monday, 16 November 2026, 6:00 PM
+
+This structure covers the model and repository stage of the assignment and can be extended later with service and controller layers.

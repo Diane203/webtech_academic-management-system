@@ -408,16 +408,10 @@ $env:DB_PASSWORD = "your-database-password"
 <img width="1916" height="1041" alt="image" src="https://github.com/user-attachments/assets/f08158d8-5380-4a29-9218-f749d6b611a9" />
 
 
-## 10. Run the project
+## 10. Conclusion
 
-```bash
-mvn test
-```
 
-If the PostgreSQL service is available, the application can then be started with:
 
-```bash
-mvn spring-boot:run
 ```
 
 

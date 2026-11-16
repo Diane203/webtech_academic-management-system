@@ -195,12 +195,12 @@ The assignment requires the design of a data model for a university academic sys
 
 
 
-
+## 5. Entity Relationship Diagram (ERD)
 
 
 <img width="1062" height="806" alt="image" src="https://github.com/user-attachments/assets/d375cba8-a0c8-4d53-8f14-05b20df078fc" />
 <img width="1061" height="601" alt="image" src="https://github.com/user-attachments/assets/b8f26069-a98d-44e0-97e4-eb1bc86d1cfc" />
-## 5. Entity Relationship Diagram (ERD)
+
 
 ```text
 

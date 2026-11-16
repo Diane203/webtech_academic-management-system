@@ -324,18 +324,6 @@ If the PostgreSQL service is available, the application can then be started with
 mvn spring-boot:run
 ```
 
-## 11. Submission checklist
 
-This project addresses the assignment requirements:
-
-- Entities identified and implemented
-- Attributes mapped to appropriate Java fields
-- Relationships modeled using JPA annotations
-- Foreign keys included where required
-- Join table used for many-to-many lecturer-course relationship
-- Join entity used for student-course registration data
-- ERD and schema documented
-- Spring Boot project created with PostgreSQL configuration
-- Repository layer provided for each entity
 
 This structure is suitable for the model and repository stage of the assignment and can be extended later with service and controller layers if required.

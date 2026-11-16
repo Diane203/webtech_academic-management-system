@@ -411,6 +411,18 @@ $env:DB_PASSWORD = "your-database-password"
 ## 10. Conclusion
 
 
+The analysis identifies six main entities: Department, Student, StudentProfile, Lecturer, Course, and Registration. Their relationships are represented using one-to-one, one-to-many, and many-to-many associations. Foreign keys maintain links between related tables. The Lecturer–Course relationship uses a join table, while the Student–Course relationship uses Registration as a join entity because registration details must also be stored. This design provides a clear foundation for implementing the Model and Repository layers with Spring Boot, Hibernate, and PostgreSQL
+
+
+
+
+
+
+
+
+
+
+
 
 ```
 

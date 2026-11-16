@@ -1,5 +1,8 @@
 # University Course Registration and Academic Management System
 
+
+
+
 	
 Student Name	IGIRANEZA Diane
 
@@ -8,8 +11,24 @@ Student Name	IGIRANEZA Diane
 
 
 Registration No.	27895
+
+
+
+
+
 Course	Web Technology and Internet
-Deadline	Monday, 16 November 2026, 6:00 PM
+
+
+
+
+
+Date:16 November 2026
+
+
+
+
+
+
 Scope	Model and Repository layers
 
 

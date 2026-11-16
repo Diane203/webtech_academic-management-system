@@ -6,8 +6,12 @@ Web Technology and Internet: Individual Assignment
 Student Name	IGIRANEZA Diane
 Registration No.	27895
 Course	Web Technology and Internet
-Deadline	Monday, 16 November 2026, 6:00 PM
+Date  16 November 2026
 Scope	Model and Repository layers
+
+
+
+
 Table of Contents
 Project Overview
 Technology Stack

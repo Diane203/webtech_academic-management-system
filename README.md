@@ -1,5 +1,15 @@
 # University Course Registration and Academic Management System
 
+	
+Student Name	IGIRANEZA Diane
+Registration No.	27895
+Course	Web Technology and Internet
+Deadline	Monday, 16 November 2026, 6:00 PM
+Scope	Model and Repository layers
+
+
+
+
 ## 1. Problem analysis and identified entities
 
 The assignment requires the design of a data model for a university academic system. The main actors and business objects in the problem statement are:

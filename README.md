@@ -34,6 +34,45 @@ Scope	Model and Repository layers
 
 
 
+
+
+
+
+**Project Overview
+
+
+
+
+
+A university currently manages academic information manually, which makes it hard to maintain student records, organize courses, assign lecturers, and track registrations. This project designs and implements the data model and repository layers of a University Course Registration and Academic Management System using Spring Boot, Spring Data JPA/Hibernate and PostgreSQL.
+
+
+
+
+The system manages:
+
+
+
+Academic departments, each with a head lecturer
+
+
+
+Students, each assigned to a department and having exactly one personal profile
+
+
+Lecturers, employed by departments and teaching multiple courses
+
+
+
+Courses, offered by departments and taught by multiple lecturers
+
+
+
+Registrations of students for courses, with date, academic year, semester, status and grade
+
+
+
+
 ## 1. Problem analysis and identified entities
 
 The assignment requires the design of a data model for a university academic system. The main actors and business objects in the problem statement are:
